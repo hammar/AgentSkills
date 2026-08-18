@@ -22,31 +22,49 @@ Examples:
 /guided-change-review --working-tree
 ```
 
+## Conceptual naming review
+
+`conceptual-naming-review` examines changed code as a domain model, identifies
+names that blur important distinctions or use inconsistent terminology, and
+builds a concept map before proposing focused renames. It remains read-only
+until the user approves the proposal, then updates usages and validates the
+result.
+
+Examples:
+
+```text
+/conceptual-naming-review
+/conceptual-naming-review --base main
+/conceptual-naming-review --working-tree
+/conceptual-naming-review path/to/subsystem
+```
+
 ## Installation
 
 ### GitHub Copilot app on Windows
 
-Copy `skills\guided-change-review\SKILL.md` to:
+Copy the desired skill directory from `skills\` to:
 
 ```text
-%APPDATA%\com.github.githubapp\app-skills\guided-change-review\SKILL.md
+%APPDATA%\com.github.githubapp\app-skills\<skill-name>\SKILL.md
 ```
 
-PowerShell:
+PowerShell examples:
 
 ```powershell
-$target = Join-Path $env:APPDATA 'com.github.githubapp\app-skills\guided-change-review'
-New-Item -ItemType Directory -Force $target | Out-Null
-Copy-Item .\skills\guided-change-review\SKILL.md $target
+$skills = 'guided-change-review', 'conceptual-naming-review'
+foreach ($skill in $skills) {
+    $target = Join-Path $env:APPDATA "com.github.githubapp\app-skills\$skill"
+    New-Item -ItemType Directory -Force $target | Out-Null
+    Copy-Item ".\skills\$skill\SKILL.md" $target
+}
 ```
 
 ### Generic user-skill installation
 
-For hosts that support the Agent Skills convention, copy the
-`skills/guided-change-review` directory into the host's user-level skills
-directory (commonly `~/.copilot/skills/`) so the resulting path is
-`~/.copilot/skills/guided-change-review/SKILL.md`. Restart or reload the host if
-required.
+For hosts that support the Agent Skills convention, copy the desired directory
+under `skills/` into the host's user-level skills directory (commonly
+`~/.copilot/skills/`). Restart or reload the host if required.
 
 These installations are local snapshots and do not update automatically. Pull
 changes from this repository and recopy the skill when publishing updates.
